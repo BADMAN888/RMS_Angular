@@ -1,0 +1,21 @@
+<nav class="navbar">
+  <div class="logo">
+    Restaurant
+  </div>
+
+  <div class="links">
+    <a routerLink="/">Home</a>
+    <a routerLink="/menu">Menu</a>
+
+    @if (!authService.isAuthenticated()) {
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Register</a>
+    }
+
+    @if (authService.isAuthenticated()) {
+      <button (click)="authService.logout()">
+        Logout
+      </button>
+    }
+  </div>
+</nav>
