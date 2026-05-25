@@ -86,3 +86,56 @@
     grid-template-columns: 1fr;
   }
 }
+.skeleton {
+  animation: pulse 1.5s infinite;
+}
+
+.image {
+  height: 180px;
+  background: #e5e7eb;
+}
+
+.line {
+  height: 14px;
+  background: #e5e7eb;
+  margin: 10px;
+  border-radius: 6px;
+}
+
+.line.short {
+  width: 60%;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.error {
+  padding: 16px;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: none;
+  background: #111827;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}

@@ -1,43 +1,15 @@
-<div class="menu">
+@if (!loading) {
+  <div class="pagination">
 
-  <h2>Menu</h2>
-
-  <div class="filters">
-
-    <button (click)="selectCategory(null)">
-      All
+    <button (click)="prevPage()" [disabled]="page === 0">
+      Prev
     </button>
 
-    @for (cat of categories; track cat.id) {
-      <button (click)="selectCategory(cat.id)">
-        {{ cat.name }}
-      </button>
-    }
+    <span>Page {{ page + 1 }} / {{ totalPages }}</span>
+
+    <button (click)="nextPage()" [disabled]="page >= totalPages - 1">
+      Next
+    </button>
 
   </div>
-
-  <div class="grid">
-
-    @for (dish of filteredDishes; track dish.id) {
-      <div class="card">
-
-        <img [src]="dish.imageUrl" />
-
-        <div class="content">
-          <h3>{{ dish.name }}</h3>
-          <p>{{ dish.description }}</p>
-
-          <div class="bottom">
-            <span class="price">{{ dish.price }} ₴</span>
-
-            @if (dish.status === 'OUT_OF_STOCK') {
-              <span class="status">Unavailable</span>
-            }
-          </div>
-        </div>
-
-      </div>
-    }
-
-  </div>
-</div>
+}

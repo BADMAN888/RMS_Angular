@@ -1,9 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core'
-
+import { DishService } from '../../services/dish.service'
 import { CategoryService } from '../../../categories/services/category.service'
 import { Dish } from '../../models/dish.model'
 import { Category } from '../../../categories/models/category.model'
-import {DishService} from '../../../../core/services/dish.service';
 
 @Component({
   selector: 'app-menu-page',
@@ -17,10 +16,15 @@ export class MenuPageComponent implements OnInit {
   private categoryService = inject(CategoryService)
 
   dishes: Dish[] = []
-  filteredDishes: Dish[] = []
   categories: Category[] = []
 
   selectedCategoryId: number | null = null
+
+  page = 0
+  size = 6
+  totalPages = 0
+
+  loading = false
 
   ngOnInit() {
     this.loadCategories()
@@ -34,20 +38,33 @@ export class MenuPageComponent implements OnInit {
   }
 
   loadDishes() {
-    this.dishService.getAll().subscribe(res => {
-      this.dishes = res
-      this.filteredDishes = res
-    })
+    this.loading = true
+
+    this.dishService.getAll(this.page, this.size, this.selectedCategoryId)
+      .subscribe(res => {
+        this.dishes = res.content
+        this.totalPages = res.totalPages
+        this.loading = false
+      })
   }
 
   selectCategory(id: number | null) {
     this.selectedCategoryId = id
+    this.page = 0
+    this.loadDishes()
+  }
 
-    if (!id) {
-      this.filteredDishes = this.dishes
-      return
+  nextPage() {
+    if (this.page < this.totalPages - 1) {
+      this.page++
+      this.loadDishes()
     }
+  }
 
-    this.filteredDishes = this.dishes.filter(d => d.categoryId === id)
+  prevPage() {
+    if (this.page > 0) {
+      this.page--
+      this.loadDishes()
+    }
   }
 }
