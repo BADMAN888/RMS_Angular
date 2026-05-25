@@ -5,3 +5,7 @@ export interface Dish {
   status: 'AVAILABLE' | 'UNAVAILABLE' | 'OUT_OF_STOCK' | 'HIDDEN';
   imageUrl: string;
 }
+
+export type CreateDishRequest = Omit<Dish, 'id'>;
+
+export type UpdateDishRequest = Dish;

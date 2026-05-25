@@ -1,0 +1,30 @@
+<div class="form-container">
+
+  <h2>{{ editMode ? 'Edit Dish' : 'Create Dish' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <label>Name</label>
+    <input type="text" formControlName="name">
+
+    <label>Description</label>
+    <textarea formControlName="description"></textarea>
+
+    <label>Image URL</label>
+    <input type="text" formControlName="imageUrl">
+
+    <label>Status</label>
+    <select formControlName="status">
+      <option value="AVAILABLE">Available</option>
+      <option value="UNAVAILABLE">Unavailable</option>
+      <option value="OUT_OF_STOCK">Out of stock</option>
+      <option value="HIDDEN">Hidden</option>
+    </select>
+
+    <button type="submit" [disabled]="form.invalid">
+      {{ editMode ? 'Update' : 'Create' }}
+    </button>
+
+  </form>
+
+</div>

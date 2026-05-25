@@ -1,70 +1,81 @@
-import { Component, OnInit, inject } from '@angular/core'
-import { DishService } from '../../services/dish.service'
-import { CategoryService } from '../../../categories/services/category.service'
-import { Dish } from '../../models/dish.model'
-import { Category } from '../../../categories/models/category.model'
+import { Component, OnInit, inject } from '@angular/core';
+import { finalize } from 'rxjs/operators';
+
+import { DishService } from '../../services/dish.service';
+import { CategoryService } from '../../../categories/services/category.service';
+
+import { Dish } from '../../models/dish.model';
+import { Category } from '../../../categories/models/category.model';
+import { PageResponse } from '../../../../core/models/page-response.model';
 
 @Component({
   selector: 'app-menu-page',
   standalone: true,
   templateUrl: './menu-page.component.html',
-  styleUrl: './menu-page.component.scss'
+  styleUrls: ['./menu-page.component.scss']
 })
 export class MenuPageComponent implements OnInit {
 
-  private dishService = inject(DishService)
-  private categoryService = inject(CategoryService)
+  private dishService = inject(DishService);
+  private categoryService = inject(CategoryService);
 
-  dishes: Dish[] = []
-  categories: Category[] = []
+  dishes: Dish[] = [];
+  categories: Category[] = [];
 
-  selectedCategoryId: number | null = null
+  selectedCategoryId: number | null = null;
 
-  page = 0
-  size = 6
-  totalPages = 0
+  page = 0;
+  size = 6;
+  totalPages = 0;
 
-  loading = false
+  loading = false;
 
-  ngOnInit() {
-    this.loadCategories()
-    this.loadDishes()
+  ngOnInit(): void {
+    this.loadCategories();
+    this.loadDishes();
   }
 
-  loadCategories() {
-    this.categoryService.getAll().subscribe(res => {
-      this.categories = res
-    })
-  }
-
-  loadDishes() {
-    this.loading = true
-
-    this.dishService.getAll(this.page, this.size, this.selectedCategoryId)
+  loadCategories(): void {
+    this.categoryService.getAll()
       .subscribe(res => {
-        this.dishes = res.content
-        this.totalPages = res.totalPages
-        this.loading = false
-      })
+        this.categories = res;
+      });
   }
 
-  selectCategory(id: number | null) {
-    this.selectedCategoryId = id
-    this.page = 0
-    this.loadDishes()
+  loadDishes(): void {
+    this.loading = true;
+
+    this.dishService.getAll(
+      this.page,
+      this.size,
+      this.selectedCategoryId
+    )
+      .pipe(
+        finalize(() => this.loading = false)
+      )
+      .subscribe(res => {
+        this.dishes = res.content;
+        this.totalPages = res.totalPages;
+      });
   }
 
-  nextPage() {
+  selectCategory(id: number | null): void {
+    this.selectedCategoryId = id;
+    this.page = 0;
+    this.loadDishes();
+  }
+
+  nextPage(): void {
     if (this.page < this.totalPages - 1) {
-      this.page++
-      this.loadDishes()
+      this.page++;
+      this.loadDishes();
     }
   }
 
-  prevPage() {
+  prevPage(): void {
     if (this.page > 0) {
-      this.page--
-      this.loadDishes()
+      this.page--;
+      this.loadDishes();
     }
   }
 }
