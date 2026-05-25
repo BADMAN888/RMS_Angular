@@ -1,9 +1,7 @@
 export interface Dish {
-  id: number
-  name: string
-  description: string
-  imageUrl: string
-  price: number
-  status: 'AVAILABLE' | 'OUT_OF_STOCK'
-  categoryId: number
+  id: number;
+  name: string;
+  description: string;
+  status: 'AVAILABLE' | 'UNAVAILABLE' | 'OUT_OF_STOCK' | 'HIDDEN';
+  imageUrl: string;
 }
